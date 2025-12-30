@@ -120,15 +120,15 @@ function loadGalleryImages() {
   const gallery = document.getElementById('gallery');
 
   const imageUrls = [
-    'https://posterjack.com/cdn/shop/articles/landscape_photography_tips_featured_image_455x455_da573899-5e4d-4cac-9e77-269882a1dcdd.jpg?v=1563421852&width=2048',
-    'https://media.istockphoto.com/id/870755932/photo/fairytale-landscape.jpg?s=612x612&w=0&k=20&c=lXgBCFZL5oCFjSMQQOhg3T-Pir3KOtHczhZfcUnrXuQ=',
-    'https://thumbs.dreamstime.com/b/summer-landscape-8622804.jpg',
-    'https://www.nps.gov/common/uploads/cropped_image/secondary/FAB0F317-9673-A7A2-8078F4B600A52F6F.jpg?width=640&quality=90&mode=crop',
-    'https://img.freepik.com/premium-photo/majestic-mountain-lake-national-park-high-tatra-strbske-pleso_146671-12978.jpg?semt=ais_hybrid&w=740&q=80',
-    'https://cdn.mos.cms.futurecdn.net/hEmhHEPGTKkygpAbAjejs.jpg',
-    'https://www.shutterstock.com/blog/wp-content/uploads/sites/5/2021/12/Landscape-Cover.jpg?w=435&h=435&crop=1',
-    'https://images.stockcake.com/public/5/2/d/52d994a6-a707-4a61-8934-a18e3f5e530c_large/winter-mountain-landscape-stockcake.jpg',
-    'https://images.iphonephotographyschool.com/3734/1120/landscape-photography-2000.jpg'
+    'images/1.jpg',
+    'images/2.jpg',
+    'images/3.jpg',
+    'images/4.jpg',
+    'images/5.jpg',
+    'images/6.jpg',
+    'images/7.jpg',
+    'images/8.jpg',
+    'images/9.jpg'
   ];
 
   imageUrls.forEach(url => {
@@ -221,4 +221,5 @@ window.onpopstate = popStateHandler;
 document.getElementById('theme-toggle').addEventListener('click', () => {
   document.body.classList.toggle('dark-mode');
 });
+
 
