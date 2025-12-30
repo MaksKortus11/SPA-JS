@@ -49,7 +49,7 @@ function RenderContactPage() {
       <textarea id="message" name="message" required></textarea>
 
       <!-- reCAPTCHA (wymaga własnego site key) -->
-      <div class="g-recaptcha" data-sitekey="6LeMGTssAAAAAH8KcX4AYNE8QS9njkNNQhMqLFdgY"></div>
+      <div class="g-recaptcha" data-sitekey="6LeMGTssAAAAAPFAtthjL30L2tL3XU2QeTR4WAq0"></div>
 
       <button type="submit">Send</button>
     </form>
@@ -212,6 +212,7 @@ window.onpopstate = popStateHandler;
 document.getElementById('theme-toggle').addEventListener('click', () => {
   document.body.classList.toggle('dark-mode');
 });
+
 
 
 
