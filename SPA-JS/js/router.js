@@ -14,14 +14,14 @@ OnStartUp();
 document.querySelector('#about-link').addEventListener('click', () => {
   let stateObj = { page: 'about' };
   document.title = 'About';
-  history.pushState(stateObj, "about", "?about");
+  history.pushState(stateObj, "about", "index.html?about");
   RenderAboutPage();
 });
 
 document.querySelector('#contact-link').addEventListener('click', () => {
   let stateObj = { page: 'contact' };
   document.title = 'Contact';
-  history.pushState(stateObj, "contact", "?contact");
+  history.pushState(stateObj, "contact", "index.html?contact");
   RenderContactPage();
 });
 
@@ -58,16 +58,17 @@ function RenderContactPage() {
 /* --- Obsługa przycisków wstecz/dalej --- */
 
 function popStateHandler() {
-  let loc = window.location.href.toString().split(window.location.host)[1];
+  const query = window.location.search;
 
-  if (loc === pageUrls.contact) {
-    RenderContactPage();
-  }
-
-  if (loc === pageUrls.about) {
+  if (query === '?about') {
     RenderAboutPage();
   }
+
+  if (query === '?contact') {
+    RenderContactPage();
+  }
 }
+
 
 window.onpopstate = popStateHandler;
 
@@ -76,3 +77,4 @@ window.onpopstate = popStateHandler;
 document.getElementById('theme-toggle').addEventListener('click', () => {
   document.body.classList.toggle('dark-mode');
 });
+
