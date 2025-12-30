@@ -1,6 +1,6 @@
 let pageUrls = {
-  about: '/index.html?about',
-  contact: '/index.html?contact'
+  about: 'index.html?about',
+  contact: 'index.html?contact'
 };
 
 function OnStartUp() {
@@ -76,3 +76,4 @@ window.onpopstate = popStateHandler;
 document.getElementById('theme-toggle').addEventListener('click', () => {
   document.body.classList.toggle('dark-mode');
 });
+
