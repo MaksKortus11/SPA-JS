@@ -10,8 +10,6 @@ function OnStartUp() {
 
 OnStartUp();
 
-/* --- Obsługa kliknięć w menu --- */
-
 document.querySelector('#about-link').addEventListener('click', () => {
   document.title = 'About';
   history.pushState({ page: 'about' }, 'about', 'index.html?about');
@@ -29,8 +27,6 @@ document.querySelector('#gallery-link').addEventListener('click', () => {
   history.pushState({ page: 'gallery' }, 'gallery', 'index.html?gallery');
   RenderGalleryPage();
 });
-
-/* --- Funkcje renderujące podstrony --- */
 
 function RenderAboutPage() {
   document.querySelector('main').innerHTML = `
@@ -82,9 +78,7 @@ function RenderContactPage() {
       return;
     }
 
-    // reCAPTCHA – żeby działało, musisz:
-    // 1. odkomentować <script> w index.html
-    // 2. podmienić TWOJ_SITE_KEY na prawdziwy
+
     if (typeof grecaptcha !== 'undefined') {
       let captcha = grecaptcha.getResponse();
       if (!captcha) {
@@ -114,7 +108,7 @@ function RenderGalleryPage() {
   setupModal();
 }
 
-/* --- Ładowanie obrazów jako BLOB + lazy loading --- */
+
 
 function loadGalleryImages() {
   const gallery = document.getElementById('gallery');
@@ -163,7 +157,6 @@ function lazyLoadImages() {
   images.forEach(img => observer.observe(img));
 }
 
-/* --- Modal --- */
 
 function setupModal() {
   const modal = document.getElementById('modal');
@@ -187,7 +180,6 @@ function setupModal() {
   });
 }
 
-/* --- Obsługa przycisków wstecz/dalej --- */
 
 function popStateHandler() {
   const query = window.location.search;
@@ -210,16 +202,16 @@ function popStateHandler() {
     return;
   }
 
-  // domyślnie strona startowa
+
   document.title = 'SPA PIAC TEST';
 }
 
 window.onpopstate = popStateHandler;
 
-/* --- Przełączanie motywu --- */
 
 document.getElementById('theme-toggle').addEventListener('click', () => {
   document.body.classList.toggle('dark-mode');
 });
+
 
 
