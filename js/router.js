@@ -1,6 +1,7 @@
 let pageUrls = {
   about: 'index.html?about',
-  contact: 'index.html?contact'
+  contact: 'index.html?contact',
+  gallery: 'index.html?gallery'
 };
 
 function OnStartUp() {
@@ -12,17 +13,21 @@ OnStartUp();
 /* --- Obsługa kliknięć w menu --- */
 
 document.querySelector('#about-link').addEventListener('click', () => {
-  let stateObj = { page: 'about' };
   document.title = 'About';
-  history.pushState(stateObj, "about", "index.html?about");
+  history.pushState({ page: 'about' }, 'about', 'index.html?about');
   RenderAboutPage();
 });
 
 document.querySelector('#contact-link').addEventListener('click', () => {
-  let stateObj = { page: 'contact' };
   document.title = 'Contact';
-  history.pushState(stateObj, "contact", "index.html?contact");
+  history.pushState({ page: 'contact' }, 'contact', 'index.html?contact');
   RenderContactPage();
+});
+
+document.querySelector('#gallery-link').addEventListener('click', () => {
+  document.title = 'Gallery';
+  history.pushState({ page: 'gallery' }, 'gallery', 'index.html?gallery');
+  RenderGalleryPage();
 });
 
 /* --- Funkcje renderujące podstrony --- */
@@ -36,6 +41,7 @@ function RenderAboutPage() {
 function RenderContactPage() {
   document.querySelector('main').innerHTML = `
     <h1 class="title">Contact with me</h1>
+
     <form id="contact-form">
       <label for="name">Name:</label>
       <input type="text" id="name" name="name" required>
@@ -46,12 +52,138 @@ function RenderContactPage() {
       <label for="message">Message:</label>
       <textarea id="message" name="message" required></textarea>
 
-      <button type="submit">Send</button>
-    </form>`;
+      <!-- reCAPTCHA (wymaga własnego site key) -->
+      <div class="g-recaptcha" data-sitekey="TWOJ_SITE_KEY"></div>
 
-  document.getElementById('contact-form').addEventListener('submit', (event) => {
+      <button type="submit">Send</button>
+    </form>
+  `;
+
+  const form = document.getElementById('contact-form');
+  form.addEventListener('submit', (event) => {
     event.preventDefault();
+
+    let name = document.getElementById('name').value.trim();
+    let email = document.getElementById('email').value.trim();
+    let message = document.getElementById('message').value.trim();
+
+    if (name.length < 2) {
+      alert('Name is too short');
+      return;
+    }
+
+    if (!email.includes('@') || !email.includes('.')) {
+      alert('Invalid email');
+      return;
+    }
+
+    if (message.length < 5) {
+      alert('Message is too short');
+      return;
+    }
+
+    // reCAPTCHA – żeby działało, musisz:
+    // 1. odkomentować <script> w index.html
+    // 2. podmienić TWOJ_SITE_KEY na prawdziwy
+    if (typeof grecaptcha !== 'undefined') {
+      let captcha = grecaptcha.getResponse();
+      if (!captcha) {
+        alert('Please confirm reCAPTCHA');
+        return;
+      }
+    }
+
     alert('Form submitted!');
+  });
+}
+
+function RenderGalleryPage() {
+  document.querySelector('main').innerHTML = `
+    <h1 class="title">Gallery</h1>
+    <div class="gallery-grid" id="gallery"></div>
+
+    <div class="modal" id="modal">
+      <div class="modal-content">
+        <span class="close-btn" id="close-modal">×</span>
+        <img id="modal-img" src="">
+      </div>
+    </div>
+  `;
+
+  loadGalleryImages();
+  setupModal();
+}
+
+/* --- Ładowanie obrazów jako BLOB + lazy loading --- */
+
+function loadGalleryImages() {
+  const gallery = document.getElementById('gallery');
+
+  const imageUrls = [
+    'https://picsum.photos/300?1',
+    'https://picsum.photos/300?2',
+    'https://picsum.photos/300?3',
+    'https://picsum.photos/300?4',
+    'https://picsum.photos/300?5',
+    'https://picsum.photos/300?6',
+    'https://picsum.photos/300?7',
+    'https://picsum.photos/300?8',
+    'https://picsum.photos/300?9'
+  ];
+
+  imageUrls.forEach(url => {
+    let img = document.createElement('img');
+    img.classList.add('gallery-item');
+    img.dataset.src = url; // do lazy loadingu
+    gallery.appendChild(img);
+  });
+
+  lazyLoadImages();
+}
+
+function lazyLoadImages() {
+  const images = document.querySelectorAll('.gallery-item');
+
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        let img = entry.target;
+
+        fetch(img.dataset.src)
+          .then(res => res.blob())
+          .then(blob => {
+            img.src = URL.createObjectURL(blob);
+          });
+
+        observer.unobserve(img);
+      }
+    });
+  });
+
+  images.forEach(img => observer.observe(img));
+}
+
+/* --- Modal --- */
+
+function setupModal() {
+  const modal = document.getElementById('modal');
+  const modalImg = document.getElementById('modal-img');
+  const closeBtn = document.getElementById('close-modal');
+
+  document.querySelectorAll('.gallery-item').forEach(img => {
+    img.addEventListener('click', () => {
+      if (!img.src) return; // jeszcze nie załadowane
+      modal.classList.add('active');
+      modalImg.src = img.src;
+    });
+  });
+
+  closeBtn.addEventListener('click', () => modal.classList.remove('active'));
+
+  modal.addEventListener('click', (e) => {
+    if (e.target === modal) {
+      modal.classList.remove('active');
+    }
   });
 }
 
@@ -61,12 +193,25 @@ function popStateHandler() {
   const query = window.location.search;
 
   if (query === '?about') {
+    document.title = 'About';
     RenderAboutPage();
+    return;
   }
 
   if (query === '?contact') {
+    document.title = 'Contact';
     RenderContactPage();
+    return;
   }
+
+  if (query === '?gallery') {
+    document.title = 'Gallery';
+    RenderGalleryPage();
+    return;
+  }
+
+  // domyślnie strona startowa
+  document.title = 'SPA PIAC TEST';
 }
 
 window.onpopstate = popStateHandler;
