@@ -10,6 +10,7 @@ function OnStartUp() {
 
 OnStartUp();
 
+
 document.querySelector('#about-link').addEventListener('click', () => {
   document.title = 'About';
   history.pushState({ page: 'about' }, 'about', 'index.html?about');
@@ -48,17 +49,18 @@ function RenderContactPage() {
       <label for="message">Message:</label>
       <textarea id="message" name="message" required></textarea>
 
-      <!-- reCAPTCHA (wymaga własnego site key) -->
       <div class="g-recaptcha" data-sitekey="6LeMGTssAAAAAPFAtthjL30L2tL3XU2QeTR4WAq0"></div>
 
       <button type="submit">Send</button>
     </form>
-
-    if (typeof grecaptcha !== "undefined") {
-    grecaptcha.render(document.querySelector(".g-recaptcha"));
-}
-
   `;
+
+
+  setTimeout(() => {
+    if (typeof grecaptcha !== "undefined") {
+      grecaptcha.render(document.querySelector(".g-recaptcha"));
+    }
+  }, 300);
 
   const form = document.getElementById('contact-form');
   form.addEventListener('submit', (event) => {
@@ -82,7 +84,6 @@ function RenderContactPage() {
       alert('Message is too short');
       return;
     }
-
 
     if (typeof grecaptcha !== 'undefined') {
       let captcha = grecaptcha.getResponse();
@@ -114,7 +115,6 @@ function RenderGalleryPage() {
 }
 
 
-
 function loadGalleryImages() {
   const gallery = document.getElementById('gallery');
 
@@ -133,7 +133,7 @@ function loadGalleryImages() {
   imageUrls.forEach(url => {
     let img = document.createElement('img');
     img.classList.add('gallery-item');
-    img.dataset.src = url; // do lazy loadingu
+    img.dataset.src = url;
     gallery.appendChild(img);
   });
 
@@ -170,7 +170,7 @@ function setupModal() {
 
   document.querySelectorAll('.gallery-item').forEach(img => {
     img.addEventListener('click', () => {
-      if (!img.src) return; // jeszcze nie załadowane
+      if (!img.src) return;
       modal.classList.add('active');
       modalImg.src = img.src;
     });
@@ -207,19 +207,13 @@ function popStateHandler() {
     return;
   }
 
-
   document.title = 'SPA PIAC TEST';
 }
 
 window.onpopstate = popStateHandler;
 
 
+
 document.getElementById('theme-toggle').addEventListener('click', () => {
   document.body.classList.toggle('dark-mode');
 });
-
-
-
-
-
-
