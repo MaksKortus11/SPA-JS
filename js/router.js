@@ -53,6 +53,11 @@ function RenderContactPage() {
 
       <button type="submit">Send</button>
     </form>
+
+    if (typeof grecaptcha !== "undefined") {
+    grecaptcha.render(document.querySelector(".g-recaptcha"));
+}
+
   `;
 
   const form = document.getElementById('contact-form');
@@ -212,6 +217,7 @@ window.onpopstate = popStateHandler;
 document.getElementById('theme-toggle').addEventListener('click', () => {
   document.body.classList.toggle('dark-mode');
 });
+
 
 
 
